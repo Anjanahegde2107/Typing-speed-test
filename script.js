@@ -16,10 +16,17 @@ const timeElement = document.getElementById('time');
 const speedElement = document.getElementById('speed');
 const startButton = document.getElementById('start');
 const stopButton = document.getElementById('stop');
+const wordCountElement = document.getElementById('wordCount');
+const accuracyElement = document.getElementById('accuracy');
+const restartButton = document.getElementById('restart');
 
 startButton.addEventListener('click', startTest);
 stopButton.addEventListener('click', stopTest);
 inputElement.addEventListener('input', checkInput);
+restartButton.addEventListener('click', () => {
+    inputElement.value = '';
+    startTest();
+});
 
 function startTest() {
     const randomIndex = Math.floor(Math.random() * sentences.length);
@@ -32,6 +39,9 @@ function startTest() {
     timeElement.textContent = time;
     speedElement.textContent = 0;
     stopButton.disabled = false;
+    wordCountElement.textContent = 0;
+    accuracyElement.textContent = 100;
+    restartButton.disabled = true;
 
     timer = setInterval(() => {
         time++;
@@ -55,12 +65,20 @@ function checkInput() {
     const typedText = inputElement.value;
     const originalText = sentenceElement.textContent;
 
-    const wpm = Math.round((typedText.split(' ').length / time) * 60);
+    const wordsTyped = typedText.split(' ').filter(word => word).length;
+    wordCountElement.textContent = wordsTyped;
+
+    const correctChars = typedText.split('').filter((char, index) => char === originalText[index]).length;
+    const accuracy = Math.round((correctChars / originalText.length) * 100);
+    accuracyElement.textContent = accuracy;
+
+    const wpm = Math.round((wordsTyped / time) * 60);
     speedElement.textContent = wpm;
 
     if (typedText === originalText) {
         clearInterval(timer);
         isTesting = false;
         stopButton.disabled = true;
+        restartButton.disabled = false;
     }
 }
