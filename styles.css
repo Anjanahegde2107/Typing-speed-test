@@ -1,6 +1,7 @@
 body {
     font-family: 'Arial', sans-serif;
     background-color: #e0f7fa; /* Light cyan background */
+    color: green; /* Set font color to green */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,12 +20,12 @@ body {
 }
 
 h1 {
-    color: #00796b; /* Teal color for the title */
+    color: green; /* Green color for the title */
     margin-bottom: 20px;
 }
 
 p {
-    color: #555; /* Dark gray for text */
+    color: green; /* Green color for text */
     font-size: 18px;
 }
 
@@ -33,19 +34,19 @@ textarea {
     height: 100px;
     margin-top: 10px;
     padding: 10px;
-    border: 2px solid #00796b; /* Teal border */
+    border: 2px solid green; /* Green border */
     border-radius: 5px;
     font-size: 16px;
     resize: none; /* Disable resizing */
 }
 
 textarea:focus {
-    border-color: #004d40; /* Darker teal on focus */
+    border-color: darkgreen; /* Darker green on focus */
     outline: none; /* Remove outline */
 }
 
 button {
-    background-color: #00796b; /* Teal background */
+    background-color: green; /* Green background */
     color: white; /* White text */
     padding: 10px 15px;
     border: none;
@@ -57,11 +58,26 @@ button {
 }
 
 button:hover {
-    background-color: #004d40; /* Darker teal on hover */
+    background-color: darkgreen; /* Darker green on hover */
 }
 
 #result {
     margin-top: 20px;
     font-size: 18px;
-    color: #00796b; /* Teal color for results */
+    color: green; /* Green color for results */
+}
+
+body.dark-theme {
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* Light text */
+}
+
+.container.dark-theme {
+    background: #1e1e1e; /* Dark container */
+    color: #ffffff; /* Light text */
+}
+
+/* Adjust button styles for dark theme */
+button.dark-theme {
+    background-color: #bb86fc; /* Purple for buttons */
 }

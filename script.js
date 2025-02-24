@@ -19,6 +19,11 @@ const stopButton = document.getElementById('stop');
 const wordCountElement = document.getElementById('wordCount');
 const accuracyElement = document.getElementById('accuracy');
 const restartButton = document.getElementById('restart');
+const customSentenceInput = document.getElementById('customSentence');
+const historyList = document.getElementById('historyList');
+
+const typingSound = new Audio('path/to/typing-sound.mp3');
+const completionSound = new Audio('path/to/completion-sound.mp3');
 
 startButton.addEventListener('click', startTest);
 stopButton.addEventListener('click', stopTest);
@@ -30,7 +35,8 @@ restartButton.addEventListener('click', () => {
 
 function startTest() {
     const randomIndex = Math.floor(Math.random() * sentences.length);
-    sentenceElement.textContent = sentences[randomIndex];
+    const sentenceToUse = customSentenceInput.value.trim() || sentences[randomIndex];
+    sentenceElement.textContent = sentenceToUse;
     inputElement.value = '';
     inputElement.disabled = false;
     inputElement.focus();
@@ -57,11 +63,24 @@ function stopTest() {
     const typedText = inputElement.value;
     const wpm = Math.round((typedText.split(' ').length / time) * 60);
     speedElement.textContent = wpm;
+
+    const correctChars = typedText.split('').filter((char, index) => char === sentenceElement.textContent[index]).length;
+    const accuracy = Math.round((correctChars / sentenceElement.textContent.length) * 100);
+    accuracyElement.textContent = accuracy;
+
+    const historyItem = document.createElement('li');
+    historyItem.textContent = `Speed: ${wpm} WPM, Accuracy: ${accuracy}%, Time: ${time} seconds`;
+    historyList.appendChild(historyItem);
+
+    completionSound.play();
+
+    updateLeaderboard(wpm);
 }
 
 function checkInput() {
     if (!isTesting) return;
 
+    typingSound.play();
     const typedText = inputElement.value;
     const originalText = sentenceElement.textContent;
 
@@ -81,4 +100,21 @@ function checkInput() {
         stopButton.disabled = true;
         restartButton.disabled = false;
     }
+}
+
+function updateLeaderboard(wpm) {
+    let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+    leaderboard.push(wpm);
+    leaderboard.sort((a, b) => b - a); // Sort in descending order
+    leaderboard = leaderboard.slice(0, 5); // Keep top 5 scores
+    localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+}
+
+function displayLeaderboard() {
+    const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+    leaderboard.forEach(score => {
+        const li = document.createElement('li');
+        li.textContent = `${score} WPM`;
+        document.getElementById('leaderboardList').appendChild(li);
+    });
 }
